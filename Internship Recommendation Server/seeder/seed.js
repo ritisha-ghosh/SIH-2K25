@@ -1,0 +1,655 @@
+const mongoose = require("mongoose");
+const Internship = require("../models/Internship");
+require("dotenv").config();
+
+const MONGO_URI = process.env.MONGO_URI;
+
+const internships = [
+  {
+    title: "Software Engineer Intern",
+    sector: "IT",
+    skills: ["Python", "Java", "React"],
+    location: "Bengaluru",
+  },
+  {
+    title: "Data Analyst Intern",
+    sector: "Finance",
+    skills: ["SQL", "Python", "Excel"],
+    location: "Mumbai",
+  },
+  {
+    title: "AI/ML Research Intern",
+    sector: "Tech",
+    skills: ["Python", "Machine Learning", "TensorFlow"],
+    location: "Hyderabad",
+  },
+  {
+    title: "Web Developer Intern",
+    sector: "IT",
+    skills: ["HTML", "CSS", "JavaScript"],
+    location: "Bengaluru",
+  },
+  {
+    title: "Cybersecurity Intern",
+    sector: "Security",
+    skills: ["Network Security", "Firewalls"],
+    location: "Delhi",
+  },
+  {
+    title: "Product Management Intern",
+    sector: "Business",
+    skills: ["Product Strategy", "Market Research", "Agile Methodologies"],
+    location: "Pune",
+  },
+  {
+    title: "UI/UX Design Intern",
+    sector: "Design",
+    skills: ["Figma", "Sketch", "UI/UX Principles"],
+    location: "Bengaluru",
+  },
+  {
+    title: "Marketing Intern",
+    sector: "Marketing",
+    skills: ["Digital Marketing", "Social Media"],
+    location: "Chennai",
+  },
+  {
+    title: "Cloud Engineer Intern",
+    sector: "Tech",
+    skills: ["AWS", "Azure", "Docker"],
+    location: "Hyderabad",
+  },
+  {
+    title: "Embedded Systems Intern",
+    sector: "Engineering",
+    skills: ["C", "C++", "Microcontrollers"],
+    location: "Pune",
+  },
+  {
+    title: "Financial Analyst Intern",
+    sector: "Finance",
+    skills: ["Excel", "Financial Modeling", "SQL"],
+    location: "Mumbai",
+  },
+  {
+    title: "Game Development Intern",
+    sector: "Tech",
+    skills: ["C++", "Unity", "Unreal Engine"],
+    location: "Bengaluru",
+  },
+  {
+    title: "Biomedical Engineer Intern",
+    sector: "Healthcare",
+    skills: ["Biomedical Engineering", "Matlab"],
+    location: "Delhi",
+  },
+  {
+    title: "SEO Specialist Intern",
+    sector: "Marketing",
+    skills: ["SEO", "Content Creation", "Google Analytics"],
+    location: "Noida",
+  },
+  {
+    title: "DevOps Intern",
+    sector: "IT",
+    skills: ["Docker", "Kubernetes", "Ansible"],
+    location: "Bengaluru",
+  },
+  {
+    title: "Mobile App Developer Intern",
+    sector: "IT",
+    skills: ["Java", "Kotlin", "Swift"],
+    location: "Hyderabad",
+  },
+  {
+    title: "Blockchain Intern",
+    sector: "Tech",
+    skills: ["Solidity", "Ethereum", "Web3.js"],
+    location: "Pune",
+  },
+  {
+    title: "Data Science Intern",
+    sector: "Tech",
+    skills: ["R Programming", "Python", "Data Visualization"],
+    location: "Mumbai",
+  },
+  {
+    title: "Human Resources Intern",
+    sector: "Business",
+    skills: ["HR Management", "Recruitment"],
+    location: "Chennai",
+  },
+  {
+    title: "Full Stack Developer Intern",
+    sector: "IT",
+    skills: ["React", "Node.js", "MongoDB", "Express.js"],
+    location: "Bengaluru",
+  },
+  {
+    title: "QA Tester Intern",
+    sector: "IT",
+    skills: ["Manual Testing", "Automated Testing", "Selenium"],
+    location: "Noida",
+  },
+  {
+    title: "Network Engineer Intern",
+    sector: "IT",
+    skills: ["Networking Protocols", "CCNA"],
+    location: "Delhi",
+  },
+  {
+    title: "Research Scientist Intern",
+    sector: "Science",
+    skills: ["Research", "Lab Techniques", "Data Analysis"],
+    location: "Bengaluru",
+  },
+  {
+    title: "Technical Writer Intern",
+    sector: "Tech",
+    skills: ["Technical Writing", "Documentation"],
+    location: "Pune",
+  },
+  {
+    title: "Sales Intern",
+    sector: "Business",
+    skills: ["Sales", "Communication"],
+    location: "Mumbai",
+  },
+  {
+    title: "Supply Chain Intern",
+    sector: "Business",
+    skills: ["Supply Chain Management", "Logistics"],
+    location: "Chennai",
+  },
+  {
+    title: "Robotics Intern",
+    sector: "Engineering",
+    skills: ["Robotics", "C++", "ROS"],
+    location: "Bengaluru",
+  },
+  {
+    title: "Cyber Forensic Intern",
+    sector: "Security",
+    skills: ["Digital Forensics", "Incident Response"],
+    location: "Hyderabad",
+  },
+  {
+    title: "Machine Learning Engineer Intern",
+    sector: "Tech",
+    skills: ["Python", "PyTorch", "TensorFlow", "NLP"],
+    location: "Pune",
+  },
+  {
+    title: "Graphic Design Intern",
+    sector: "Design",
+    skills: ["Adobe Photoshop", "Illustrator"],
+    location: "Mumbai",
+  },
+  {
+    title: "Business Development Intern",
+    sector: "Business",
+    skills: ["Sales Strategy", "Market Analysis"],
+    location: "Gurgaon",
+  },
+  {
+    title: "Legal Intern",
+    sector: "Legal",
+    skills: ["Legal Research", "Contract Review"],
+    location: "Mumbai",
+  },
+  {
+    title: "Aerospace Engineering Intern",
+    sector: "Engineering",
+    skills: ["CAD", "SolidWorks", "Aerodynamics"],
+    location: "Bangalore",
+  },
+  {
+    title: "Data Engineer Intern",
+    sector: "Tech",
+    skills: ["SQL", "ETL", "Data Warehousing"],
+    location: "Hyderabad",
+  },
+  {
+    title: "UX Research Intern",
+    sector: "Design",
+    skills: ["User Interviews", "Usability Testing"],
+    location: "Pune",
+  },
+  {
+    title: "Public Relations Intern",
+    sector: "Marketing",
+    skills: ["Media Relations", "Press Releases"],
+    location: "Delhi",
+  },
+  {
+    title: "Chemical Engineering Intern",
+    sector: "Engineering",
+    skills: ["Process Control", "Lab Work"],
+    location: "Chennai",
+  },
+  {
+    title: "Frontend Developer Intern",
+    sector: "IT",
+    skills: ["HTML", "CSS", "React", "Tailwind CSS"],
+    location: "Bengaluru",
+  },
+  {
+    title: "Backend Developer Intern",
+    sector: "IT",
+    skills: ["Node.js", "Express.js", "MongoDB", "REST APIs"],
+    location: "Pune",
+  },
+  {
+    title: "Game Tester Intern",
+    sector: "Tech",
+    skills: ["QA", "Bug Reporting", "Game Engines"],
+    location: "Mumbai",
+  },
+  {
+    title: "Medical Research Intern",
+    sector: "Healthcare",
+    skills: ["Clinical Trials", "Scientific Writing"],
+    location: "Delhi",
+  },
+  {
+    title: "Renewable Energy Intern",
+    sector: "Engineering",
+    skills: ["Solar Energy", "Project Management"],
+    location: "Hyderabad",
+  },
+  {
+    title: "Social Media Intern",
+    sector: "Marketing",
+    skills: ["Social Media Management", "Content Creation"],
+    location: "Bengaluru",
+  },
+  {
+    title: "Mobile Game Developer Intern",
+    sector: "Tech",
+    skills: ["Unity", "C#", "Mobile Platforms"],
+    location: "Pune",
+  },
+  {
+    title: "Financial Planning Intern",
+    sector: "Finance",
+    skills: ["Financial Analysis", "Client Communication"],
+    location: "Mumbai",
+  },
+  {
+    title: "Cloud Security Intern",
+    sector: "Security",
+    skills: ["AWS Security", "Penetration Testing"],
+    location: "Chennai",
+  },
+  {
+    title: "Digital Artist Intern",
+    sector: "Design",
+    skills: ["Adobe Photoshop", "Illustrator", "3D Modeling"],
+    location: "Bengaluru",
+  },
+  {
+    title: "Market Research Analyst Intern",
+    sector: "Business",
+    skills: ["Data Analysis", "Survey Design", "Excel"],
+    location: "Gurgaon",
+  },
+  {
+    title: "Systems Analyst Intern",
+    sector: "IT",
+    skills: ["System Design", "Business Requirements"],
+    location: "Noida",
+  },
+  {
+    title: "Electrical Engineering Intern",
+    sector: "Engineering",
+    skills: ["Circuit Design", "AutoCAD"],
+    location: "Delhi",
+  },
+  {
+    title: "E-commerce Intern",
+    sector: "Marketing",
+    skills: ["Online Store Management", "Customer Support"],
+    location: "Hyderabad",
+  },
+  {
+    title: "Machine Vision Intern",
+    sector: "Tech",
+    skills: ["OpenCV", "Python", "Computer Vision"],
+    location: "Pune",
+  },
+  {
+    title: "Content Writer Intern",
+    sector: "Marketing",
+    skills: ["Content Creation", "Blogging", "SEO"],
+    location: "Mumbai",
+  },
+  {
+    title: "Software QA Engineer Intern",
+    sector: "IT",
+    skills: ["Automated Testing", "Selenium", "Java"],
+    location: "Bengaluru",
+  },
+  {
+    title: "Mechanical Engineering Intern",
+    sector: "Engineering",
+    skills: ["CAD", "Thermodynamics"],
+    location: "Chennai",
+  },
+  {
+    title: "Data Visualization Intern",
+    sector: "Tech",
+    skills: ["D3.js", "Tableau", "Python"],
+    location: "Hyderabad",
+  },
+  {
+    title: "Cyber Threat Analyst Intern",
+    sector: "Security",
+    skills: ["Threat Intelligence", "Malware Analysis"],
+    location: "Pune",
+  },
+  {
+    title: "Human-Computer Interaction Intern",
+    sector: "Design",
+    skills: ["HCI", "User Research", "Prototyping"],
+    location: "Bengaluru",
+  },
+  {
+    title: "Corporate Finance Intern",
+    sector: "Finance",
+    skills: ["Financial Modeling", "Valuation"],
+    location: "Mumbai",
+  },
+  {
+    title: "Full Stack Development Intern",
+    sector: "IT",
+    skills: ["React", "Node.js", "Express.js", "MongoDB"],
+    location: "Hyderabad",
+  },
+  {
+    title: "Robotics Software Intern",
+    sector: "Engineering",
+    skills: ["C++", "ROS", "Python"],
+    location: "Pune",
+  },
+  {
+    title: "Investment Banking Intern",
+    sector: "Finance",
+    skills: ["Financial Analysis", "Mergers & Acquisitions"],
+    location: "Bengaluru",
+  },
+  {
+    title: "Product Design Intern",
+    sector: "Design",
+    skills: ["Figma", "User Persona", "Wireframing"],
+    location: "Mumbai",
+  },
+  {
+    title: "Data Scientist Intern",
+    sector: "Tech",
+    skills: ["Python", "R Programming", "Machine Learning"],
+    location: "Chennai",
+  },
+  {
+    title: "Marketing Communications Intern",
+    sector: "Marketing",
+    skills: ["Public Relations", "Content Strategy"],
+    location: "Hyderabad",
+  },
+  {
+    title: "Chemical Process Intern",
+    sector: "Engineering",
+    skills: ["Process Simulation", "ASPEN"],
+    location: "Delhi",
+  },
+  {
+    title: "Frontend Engineer Intern",
+    sector: "IT",
+    skills: ["React", "JavaScript", "CSS", "UI/UX"],
+    location: "Bengaluru",
+  },
+  {
+    title: "Backend Engineer Intern",
+    sector: "IT",
+    skills: ["Node.js", "Express.js", "PostgreSQL"],
+    location: "Pune",
+  },
+  {
+    title: "Mobile Developer Intern (Android)",
+    sector: "IT",
+    skills: ["Kotlin", "Android Studio"],
+    location: "Hyderabad",
+  },
+  {
+    title: "Mobile Developer Intern (iOS)",
+    sector: "IT",
+    skills: ["Swift", "Xcode"],
+    location: "Bengaluru",
+  },
+  {
+    title: "Cybersecurity Analyst Intern",
+    sector: "Security",
+    skills: ["Vulnerability Assessment", "Incident Response"],
+    location: "Noida",
+  },
+  {
+    title: "Brand Management Intern",
+    sector: "Marketing",
+    skills: ["Brand Strategy", "Market Research"],
+    location: "Mumbai",
+  },
+  {
+    title: "Logistics Intern",
+    sector: "Business",
+    skills: ["Supply Chain Management", "Inventory Management"],
+    location: "Chennai",
+  },
+  {
+    title: "Aerodynamics Intern",
+    sector: "Engineering",
+    skills: ["Aerodynamics", "CFD", "Matlab"],
+    location: "Bengaluru",
+  },
+  {
+    title: "Database Administrator Intern",
+    sector: "IT",
+    skills: ["MongoDB", "SQL", "Database Management"],
+    location: "Pune",
+  },
+  {
+    title: "UX/UI Designer Intern",
+    sector: "Design",
+    skills: ["Figma", "Adobe XD", "User Flows"],
+    location: "Hyderabad",
+  },
+  {
+    title: "Technical Support Intern",
+    sector: "IT",
+    skills: ["Troubleshooting", "Customer Service"],
+    location: "Delhi",
+  },
+  {
+    title: "Data Engineering Intern",
+    sector: "Tech",
+    skills: ["Python", "SQL", "Data Pipelines"],
+    location: "Mumbai",
+  },
+  {
+    title: "HR Generalist Intern",
+    sector: "Business",
+    skills: ["Recruitment", "Employee Relations"],
+    location: "Chennai",
+  },
+  {
+    title: "Industrial Design Intern",
+    sector: "Design",
+    skills: ["SolidWorks", "3D Printing"],
+    location: "Bengaluru",
+  },
+  {
+    title: "Financial Modeling Intern",
+    sector: "Finance",
+    skills: ["Excel", "Financial Projections"],
+    location: "Pune",
+  },
+  {
+    title: "Machine Learning Research Intern",
+    sector: "Tech",
+    skills: ["Python", "PyTorch", "NLP"],
+    location: "Hyderabad",
+  },
+  {
+    title: "Robotics Engineer Intern",
+    sector: "Engineering",
+    skills: ["C++", "Embedded Systems"],
+    location: "Mumbai",
+  },
+  {
+    title: "Digital Marketing Strategist Intern",
+    sector: "Marketing",
+    skills: ["Digital Strategy", "SEM", "SEO"],
+    location: "Bengaluru",
+  },
+  {
+    title: "Social Media Manager Intern",
+    sector: "Marketing",
+    skills: ["Social Media Analytics", "Content Creation"],
+    location: "Noida",
+  },
+  {
+    title: "Network Administration Intern",
+    sector: "IT",
+    skills: ["Network Configuration", "Linux"],
+    location: "Delhi",
+  },
+  {
+    title: "Data Analytics Intern",
+    sector: "Tech",
+    skills: ["Python", "Pandas", "Data Visualization"],
+    location: "Chennai",
+  },
+  {
+    title: "Financial Risk Intern",
+    sector: "Finance",
+    skills: ["Risk Analysis", "Excel"],
+    location: "Hyderabad",
+  },
+  {
+    title: "Graphic Designer Intern",
+    sector: "Design",
+    skills: ["Adobe Photoshop", "Illustrator", "Branding"],
+    location: "Pune",
+  },
+  {
+    title: "Business Analyst Intern",
+    sector: "Business",
+    skills: ["Business Analysis", "Requirements Gathering"],
+    location: "Bengaluru",
+  },
+  {
+    title: "Supply Chain Analyst Intern",
+    sector: "Business",
+    skills: ["Supply Chain Optimization", "Data Analysis"],
+    location: "Mumbai",
+  },
+  {
+    title: "Cybersecurity Researcher Intern",
+    sector: "Security",
+    skills: ["Threat Hunting", "Cyber Forensics"],
+    location: "Chennai",
+  },
+  {
+    title: "Web Design Intern",
+    sector: "Design",
+    skills: ["Figma", "HTML", "CSS"],
+    location: "Hyderabad",
+  },
+  {
+    title: "Embedded Systems Engineer Intern",
+    sector: "Engineering",
+    skills: ["C++", "Microcontrollers", "Firmware"],
+    location: "Pune",
+  },
+  {
+    title: "Equity Research Intern",
+    sector: "Finance",
+    skills: ["Equity Research", "Valuation", "Financial Modeling"],
+    location: "Bengaluru",
+  },
+  {
+    title: "Mobile UX/UI Intern",
+    sector: "Design",
+    skills: ["UI/UX", "Figma", "Mobile Design"],
+    location: "Mumbai",
+  },
+  {
+    title: "Digital Content Intern",
+    sector: "Marketing",
+    skills: ["Content Creation", "Copywriting", "SEO"],
+    location: "Chennai",
+  },
+  {
+    title: "Data Science Research Intern",
+    sector: "Tech",
+    skills: ["Python", "R", "Statistical Modeling"],
+    location: "Hyderabad",
+  },
+  {
+    title: "Product Marketing Intern",
+    sector: "Marketing",
+    skills: ["Product Marketing", "Go-to-market Strategy"],
+    location: "Pune",
+  },
+  {
+    title: "Software QA Intern",
+    sector: "IT",
+    skills: ["Manual Testing", "Test Case Design"],
+    location: "Bengaluru",
+  },
+  {
+    title: "Technical Product Intern",
+    sector: "Business",
+    skills: ["Product Management", "Technical Skills"],
+    location: "Mumbai",
+  },
+  {
+    title: "Robotics Vision Intern",
+    sector: "Engineering",
+    skills: ["Computer Vision", "Robotics"],
+    location: "Chennai",
+  },
+  {
+    title: "Cybersecurity Consultant Intern",
+    sector: "Security",
+    skills: ["Security Consulting", "Risk Management"],
+    location: "Hyderabad",
+  },
+  {
+    title: "Financial Systems Intern",
+    sector: "Finance",
+    skills: ["Financial Software", "SQL"],
+    location: "Pune",
+  },
+  {
+    title: "Marketing Analyst Intern",
+    sector: "Marketing",
+    skills: ["Data Analysis", "Market Trends"],
+    location: "Bengaluru",
+  },
+];
+
+const seedDB = async () => {
+  try {
+    await mongoose.connect(MONGO_URI);
+    console.log("MongoDB connected for seeding.");
+    await Internship.deleteMany({});
+    console.log("Old internships cleared.");
+    await Internship.insertMany(internships);
+    console.log("Internships seeded successfully.");
+  } catch (error) {
+    console.error("Error seeding data:", error);
+  } finally {
+    mongoose.connection.close();
+  }
+};
+
+seedDB();
